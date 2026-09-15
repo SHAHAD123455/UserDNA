@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserDNA | سجل الأمن</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">🧬 UserDNA</div>
+        <div class="user-info"><a href="/dashboard">← لوحة التحكم</a> | <a href="/logout" class="logout-btn">خروج</a></div>
+    </nav>
+
+    <div class="main-grid">
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3>🚨 سجل أحداث الخطر (آخر 50 حدثاً)</h3>
+            <table class="log-table">
+                <tr><th>الوقت</th><th>درجة الخطر</th><th>الحالة</th><th>التنبيه</th></tr>
+                {% for e in events %}
+                <tr class="{% if e[0] > 70 %}danger-row{% elif e[0] > 40 %}warn-row{% endif %}">
+                    <td>{{ e[3]|strftime }}</td>
+                    <td>{{ e[0] }}%</td>
+                    <td>{{ e[1] }}</td>
+                    <td>{{ e[2] }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">لا توجد أحداث خطر مسجلة ✅</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3>🧠 عينات التعلم (البيانات الخام التي تعلم منها النظام)</h3>
+            <table class="log-table">
+                <tr><th>#</th><th>سرعة الكتابة</th><th>تذبذب الماوس</th></tr>
+                {% for s in samples %}
+                <tr><td>{{ loop.index }}</td><td>{{ "%.1f"|format(s[0]) }} ms</td><td>{{ "%.1f"|format(s[1]) }} px</td></tr>
+                {% else %}
+                <tr><td colspan="3">لم يتم جمع عينات بعد</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

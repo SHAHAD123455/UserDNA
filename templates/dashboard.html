@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserDNA | لوحة التحكم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- شاشة القفل الكامل -->
+    <div id="lockdown-screen" class="hidden">
+        <div class="lock-content">
+            <div class="logo">🧬 UserDNA</div>
+            <h1 class="glitch">SYSTEM LOCKDOWN</h1>
+            <p>تم اكتشاف نمط سلوكي غريب. لا يمكن فتح الجهاز إلا بالبصمة الأصلية.</p>
+            <button onclick="resetLockdown()">التحقق من البصمة 🖐️</button>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">🧬 UserDNA</div>
+        <div class="user-info">مرحباً، {{ user }} | <a href="/security_log">📋 سجل الأمن</a> | <a href="/logout" class="logout-btn">خروج</a></div>
+    </nav>
+
+    <div class="main-grid">
+        <div class="card risk-card">
+            <h3>UserDNA Status</h3>
+            <div class="gauge-container">
+                <svg class="gauge" viewBox="0 0 100 50">
+                    <path class="gauge-bg" d="M10 45 A 40 40 0 0 1 90 45" fill="none" stroke="#2d2d44" stroke-width="8"/>
+                    <path id="gauge-fill" class="gauge-fill" d="M10 45 A 40 40 0 0 1 90 45" fill="none" stroke="#a855f7" stroke-width="8" stroke-dasharray="126" stroke-dashoffset="126"/>
+                </svg>
+                <div id="risk-value" class="risk-number">0%</div>
+            </div>
+            <p id="status-text">جاري التعلم من سلوكك...</p>
+            <div id="learning-bar" class="learning-bar">
+                <div class="learning-label">🧠 وضع التعلم: <span id="learning-progress">0</span>%</div>
+                <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+            </div>
+            <button id="simulate-btn" class="simulate-btn" onclick="simulateAttacker()">🎭 محاكاة مهاجم</button>
+        </div>
+
+        <div class="card analysis-card">
+            <h3>Behavior Analysis</h3>
+            <div class="metric"><span>سرعة الكتابة:</span> <span id="m-speed">0</span> ms</div>
+            <div class="metric"><span>تذبذب الماوس:</span> <span id="m-jitter">0</span> px</div>
+            <div class="metric"><span>نمط النقر:</span> <span id="m-click">مستقر</span></div>
+        </div>
+
+        <div class="card alerts-card">
+            <h3>Security Alerts</h3>
+            <div id="alert-box" class="alert-box">لا توجد تهديدات حالية...</div>
+        </div>
+
+        <div class="card apps-card">
+            <h3>التطبيقات</h3>
+            <div class="apps-grid">
+                <div class="app-item public">🌐 المتصفح</div>
+                <div class="app-item public">🎵 الموسيقى</div>
+                {% for app in personal_apps %}
+                <div class="app-item personal" data-app>{{ app }}</div>
+                {% endfor %}
+            </div>
+            <p id="apps-status" class="apps-status">جميع التطبيقات متاحة ✅</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/behavior.js') }}"></script>
+</body>
+</html>
